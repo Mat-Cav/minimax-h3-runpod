@@ -1,7 +1,5 @@
 FROM lmsysorg/sglang:latest
 
-LABEL org.opencontainers.image.source="https://github.com/Mat-Cav/minimax-h3-runpod"
-
 WORKDIR /app
 
 # The SGLang image includes its source tree. The diffusion extra supplies the
@@ -22,5 +20,7 @@ ENV HF_HOME=/workspace/huggingface \
     SGLANG_HOST=127.0.0.1 \
     SGLANG_PORT=30010 \
     H3_PROFILE=h100x4
+
+LABEL org.opencontainers.image.source="https://github.com/Mat-Cav/minimax-h3-runpod"
 
 CMD ["./scripts/start.sh"]
