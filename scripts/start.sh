@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-: "${FL2VA_API_KEY:?Set FL2VA_API_KEY to protect the public API}"
-
 mkdir -p "${HF_HOME:-/workspace/huggingface}"
+
+model_path="${MODEL_PATH:-MiniMaxAI/MiniMax-H3}"
+cached_root="/runpod-volume/huggingface-cache/hub/models--MiniMaxAI--MiniMax-H3"
+if [[ -f "$cached_root/refs/main" ]]; then
+  cached_revision="$(tr -d '\n' < "$cached_root/refs/main")"
+  cached_snapshot="$cached_root/snapshots/$cached_revision"
+  if [[ -d "$cached_snapshot" ]]; then
+    model_path="$cached_snapshot"
+  fi
+fi
 
 profile="${H3_PROFILE:-h100x4}"
 case "$profile" in
@@ -55,7 +63,7 @@ case "$profile" in
 esac
 
 sglang serve \
-  --model-path MiniMaxAI/MiniMax-H3 \
+  --model-path "$model_path" \
   --model-variant fl2va \
   --host "${SGLANG_HOST:-127.0.0.1}" \
   --port "${SGLANG_PORT:-30010}" \
@@ -67,4 +75,4 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
-exec uvicorn app.main:app --host 0.0.0.0 --port "${API_PORT:-8000}"
+exec python3 handler.py

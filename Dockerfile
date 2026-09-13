@@ -12,14 +12,13 @@ COPY requirements-api.txt ./
 RUN python3 -m pip install --no-cache-dir -r requirements-api.txt
 
 COPY app ./app
+COPY handler.py ./handler.py
 COPY scripts/start.sh ./scripts/start.sh
 RUN chmod +x ./scripts/start.sh
 
 ENV HF_HOME=/workspace/huggingface \
     SGLANG_HOST=127.0.0.1 \
     SGLANG_PORT=30010 \
-    API_PORT=8000 \
     H3_PROFILE=h100x4
 
-EXPOSE 8000
 CMD ["./scripts/start.sh"]
