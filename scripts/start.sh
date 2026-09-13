@@ -18,8 +18,7 @@ case "$profile" in
   h100x4)
     h3_args=(
       --num-gpus 4
-      --tp-size 2
-      --ulysses-degree 2
+      --ulysses-degree 4
       --encoder-parallel auto
       --performance-mode speed
     )
