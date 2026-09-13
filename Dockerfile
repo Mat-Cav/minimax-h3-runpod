@@ -1,5 +1,7 @@
 FROM lmsysorg/sglang:latest
 
+LABEL org.opencontainers.image.source="https://github.com/Mat-Cav/minimax-h3-runpod"
+
 WORKDIR /app
 
 # The SGLang image includes its source tree. The diffusion extra supplies the
